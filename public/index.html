@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        Sensor Registry for SitOpt
+    </title>
+    <link rel="stylesheet" type="text/css" href="public/bootstrap/css/bootstrap.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">SitOpt Sensor Registry</a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav">
+                    <li id="addSensor" onclick="navbarClick($, document, 'addSensor');"><a href="#">Add Sensor</a></li>
+                    <li id="listSensors" onclick="navbarClick($, document, 'listSensors')"><a href="#">List Sensors</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="jumbotron">
+        <div id="addSensorContent" style="display: none;">
+            <br />
+        </div>
+        <div id="listSensorsContent" style="display: none;">
+            <br />
+        </div>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.js"></script>
+<script src="public/bootstrap/js/bootstrap.js"></script>
+<script src="public/javascript/addSensor.js"></script>
+<script src="public/javascript/listSensors.js"></script>
+<script language="JavaScript">
+    function load() {
+        $.delete = function(url, data, callback, type){
+
+            if ( $.isFunction(data) ){
+                type = type || callback,
+                        callback = data,
+                        data = {}
+            }
+
+            return $.ajax({
+                url: url,
+                type: 'DELETE',
+                success: callback,
+                data: data,
+                contentType: type
+            });
+        };
+
+        $.put = function(url, data, callback, type){
+
+            if ( $.isFunction(data) ){
+                type = type || callback,
+                        callback = data,
+                        data = {}
+            }
+
+            return $.ajax({
+                url: url,
+                type: 'PUT',
+                success: callback,
+                data: data,
+                contentType: type
+            });
+        };
+
+        if ($('.active')[0].id == 'listSensors') {
+            $("#listSensorsContent").text("");
+            $("#addSensorContent").text("");
+            var url = location.protocol + "//" + location.host + "/sensor";
+            $.get(url, function(res, code) {
+                $('#listSensorsContent').append(formatSensors(res.payload));
+                $('tr').click(tableclick);
+                $('#header').unbind('click');
+            });
+        } else {
+            $("#listSensorsContent").text("");
+            $("#addSensorContent").text("");
+            $("#addSensorContent").append(
+                    '<input type="text" type="text" class="form-control" placeholder="ObjectID" name="objectID" id="objectID" />'
+                    + '<input type="text" type="text" class="form-control" placeholder="SensorID" name="sensorID" id="sensorID" />'
+                    + '<input type="text" type="text" class="form-control" placeholder="Sensor Type" name="sensorType" id="sensorType" />'
+                    + '<input type="text" type="text" class="form-control" placeholder="Sensor URL" name="sensorUrl" id="sensorUrl" />'
+                    + '<input type="text" type="text" class="form-control" placeholder="Sensor Quality" name="sensorQuality" id="sensorQuality" />'
+                    + '<input type="text" type="text" class="form-control" placeholder="Sensor Unit" name="unit" id="unit" />'
+                    + '<input type="text" type="text" class="form-control" placeholder="Unit Symbol" name="unitSymbol" id="unitSymbol" />'
+                    + '<input type="text" class="form-control" placeholder="default value" name="defaultValue" id="defaultValue" />'
+                    + '<button onclick="save();setTimeout(function() {navbarClick($, document, \'listSensors\')},1000)">Save</button>');
+        }
+    }
+
+    function navbarClick($, document, id) {
+        $(document).prop('title', id);
+        var activeElement = $(".active");
+        var element = $("#" + id);
+        if (activeElement[0] != element[0]) {
+            activeElement.removeClass("active");
+            element.addClass("active");
+            id = '#' + id + 'Content';
+            $(id)[0].style.display = 'block';
+            id = '#' + activeElement[0].id + 'Content';
+            $(id)[0].style.display = 'none';
+            load($);
+        } else {
+            id = '#' + id + 'Content';
+            $(id)[0].style.display = 'block';
+            load();
+        }
+    }
+
+    $(document).ready(function() {
+        if ($('.active').length == 0) {
+            $('#addSensor').addClass("active");
+            navbarClick($, document, "addSensor");
+        }
+    });
+</script>
+</body>
+</html>

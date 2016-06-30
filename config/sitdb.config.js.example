@@ -1,0 +1,8 @@
+/**
+ * Created by armin on 17.01.16.
+ */
+module.exports = {
+    server: "127.0.0.1",
+    port: "10010",
+    protocol: "http"
+}
