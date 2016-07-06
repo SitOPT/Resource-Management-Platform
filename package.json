@@ -7,9 +7,9 @@
     "node": ">=0.10.0"
   },
   "dependencies": {
-    "actionhero": "latest",
+    "actionhero": "^13.4.3",
     "async": "^1.5.0",
-    "grunt": "latest",
+    "grunt": "^1.0.1",
     "mongoose": "^4.1.8",
     "ws": "latest"
   },
