@@ -6,5 +6,5 @@ module.exports = {
     port: '27017',
     name: 'RBS',
     user: 'RBS',
-    password: '123456'
+    password: 'RBS'
 };
