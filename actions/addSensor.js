@@ -14,7 +14,7 @@ exports.action = {
     inputs: {
         sensorName: {required: true},
         objectName: {required: true},
-        sensorUrl: {required: true},
+        sensorUrl: {required: false},
         sensorType: {required: true},
         timeStamp: {required: false},
         quality: {required: true},
@@ -25,8 +25,9 @@ exports.action = {
 
     run: function(api, data, next){
         var async = require('async');
+        var addToSitdb = require('../helper/addToSitdb.js');
         var timestamp = data.params.timeStamp || new Date();
-        var sensorUrl = data.params.sensorUrl;
+        var sensorUrl = data.params.sensorUrl || "";
         api.sensor.find({sensorID: data.params.sensorName, objectID: data.params.objectName}, function (err, result) {
             if (err) {
                 data.response.error = err;
@@ -42,7 +43,7 @@ exports.action = {
                     objectID: data.params.objectName,
                     sensorType: data.params.sensorType,
                     sensorUrl: sensorUrl,
-                    timestamp: timestamp.toString(),
+                    timestamp: timestamp.getTime(),
                     quality: data.params.quality,
                     unit: data.params.unit,
                     unitSymbol: data.params.unitSymbol,
@@ -55,6 +56,7 @@ exports.action = {
                         next(err);
                     } else {
                         data.response.payload = sensor;
+                        addToSitdb(sensor);
                         next();
                     }
                 });

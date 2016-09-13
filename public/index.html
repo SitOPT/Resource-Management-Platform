@@ -86,15 +86,15 @@
             $("#listSensorsContent").text("");
             $("#addSensorContent").text("");
             $("#addSensorContent").append(
-                    '<input type="text" type="text" class="form-control" placeholder="ObjectID" name="objectID" id="objectID" />'
-                    + '<input type="text" type="text" class="form-control" placeholder="SensorID" name="sensorID" id="sensorID" />'
+                    '<input type="text" type="text" class="form-control" placeholder="Thing Name" name="objectID" id="objectID" />'
+                    + '<input type="text" type="text" class="form-control" placeholder="Sensor Name" name="sensorID" id="sensorID" />'
                     + '<input type="text" type="text" class="form-control" placeholder="Sensor Type" name="sensorType" id="sensorType" />'
-                    + '<input type="text" type="text" class="form-control" placeholder="Sensor URL" name="sensorUrl" id="sensorUrl" />'
+                    + '<input type="text" type="text" class="form-control" placeholder="Sensor URL (optional)" name="sensorUrl" id="sensorUrl" />'
                     + '<input type="text" type="text" class="form-control" placeholder="Sensor Quality" name="sensorQuality" id="sensorQuality" />'
                     + '<input type="text" type="text" class="form-control" placeholder="Sensor Unit" name="unit" id="unit" />'
                     + '<input type="text" type="text" class="form-control" placeholder="Unit Symbol" name="unitSymbol" id="unitSymbol" />'
-                    + '<input type="text" class="form-control" placeholder="default value" name="defaultValue" id="defaultValue" />'
-                    + '<button onclick="save();setTimeout(function() {navbarClick($, document, \'listSensors\')},1000)">Save</button>');
+                    + '<input type="text" class="form-control" placeholder="default value (optional)" name="defaultValue" id="defaultValue" />'
+                    + '<button onclick="save();//setTimeout(function() {navbarClick($, document, \'listSensors\')},1000)">Save</button>');
         }
     }
 

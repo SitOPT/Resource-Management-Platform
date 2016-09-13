@@ -40,9 +40,8 @@ exports.action = {
         if (data.params.timeStamp != null) {
             updates.timestamp = data.params.timeStamp;
         } else {
-            updates.timestamp = new Date();
+            updates.timestamp = new Date().getTime();
         }
-        updates.timestamp = updates.timestamp.toString();
         if (data.params.quality != null) {
             updates.quality = data.params.quality;
         }

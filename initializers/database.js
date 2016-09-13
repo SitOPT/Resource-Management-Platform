@@ -30,7 +30,7 @@ module.exports = {
                 objectID: String,
                 sensorID: String,
                 sensorUrl: String,
-                timestamp: Date,
+                timestamp: Number,
                 quality: Number,
                 sensorType: String,
                 unit: String,

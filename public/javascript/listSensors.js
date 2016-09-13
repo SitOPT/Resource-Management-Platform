@@ -8,7 +8,7 @@ function tableclick(e) {
         var child = $(row.children()[i]);
         var text = child.text();
         child.text("");
-        if (text != null && (text != "" || i == 8)) {
+        if (text != null && (text != "" || i == 8 || i == 4)) {
             $("body").append("<p style='display:none;'>" + text + "</p>");
             var input = "";
             if (i < 2) {
@@ -43,8 +43,8 @@ function formatSensors(sensors) {
     var entries = "";
     for (var index in sensors) {
         var sensor = sensors[index];
-        entries += "<tr><td>" + sensor.objectID + "</td><td>" + sensor.sensorID + "</td><td>" + sensor.sensorType + "</td><td>" + sensor.quality + "</td><td>" + sensor.sensorUrl +
-            "</td><td>" + new Date(sensor.timeStamp) + "</td><td>" + sensor.unit + "</td><td>" + sensor.unitSymbol + "</td>" +
+        entries += "<tr><td>" + sensor.objectID + "</td><td>" + sensor.sensorID + "</td><td>" + sensor.sensorType + "</td><td>" + sensor.quality + "</td><td>" + (sensor.sensorUrl || "") +
+            "</td><td>" + new Date(sensor.timestamp) + "</td><td>" + sensor.unit + "</td><td>" + sensor.unitSymbol + "</td>" +
             "<td>" + sensor.defaultValue + "</td></tr>";
     }
     return table + entries + "</tbody></table>";
@@ -66,11 +66,11 @@ function buttonclick(action) {
         url = location.protocol + "//" + location.host + "/sensor/" + $($("p")[0]).text() + "/" + $($("p")[1]).text();
         var unitSymbol = $($("input")[7]).val();
         var unit = $($("input")[6]).val();
-        var surl = $($("input")[4]).val();
+        var surl = $($("input")[4]).val() || "";
         var qual = $($("input")[3]).val();
         var type = $($("input")[2]).val();
         var defaultValue = $($("input")[8]).val();
-        if (!(surl == null || surl == "" || type == null || type == "")) {
+        if (!(surl == null || type == null || type == "")) {
             var match = [surl];
             if (match != null && match[0].length == surl.length) {
                 $.put(url, {sensorUrl: surl, sensorType: type, quality: qual, unit: unit, unitSymbol: unitSymbol, defaultValue: defaultValue}, function(res, code) {
