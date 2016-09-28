@@ -28,7 +28,7 @@ exports.action = {
 						next(err);
 					} else {
 						api.sensorCache.find({sensorID: sensor.sensorID, objectID: sensor.objectID}, function (error, cache) {
-							console.log(cache)
+							console.log(cache);
 							var val = cache[0];
 							for (var i = 1; i < cache.length; i++) {
 								if (val.timeStamp < cache[i].timeStamp) {

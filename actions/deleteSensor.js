@@ -21,7 +21,9 @@ exports.action = {
             if (err) {
                 next(err);
             } else {
-                next();
+                api.sensorCache.remove({objectID: data.params.thingName, sensorID: data.params.sensorName}, function (e) {
+                    next(e);
+                }).exec();
             }
         });
     }

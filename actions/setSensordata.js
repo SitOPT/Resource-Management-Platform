@@ -27,8 +27,10 @@ exports.action = {
 			}else{
 				if (sensordata != null) {
 					api.sensor.findOne({'sensorID': data.params.sensorName, 'objectID': data.params.thingName}, function (err, sensor) {
-						sensor.defaultValueActive = false;
-						sensor.save();
+						if (sensor != null) {
+							sensor.defaultValueActive = false;
+							sensor.save();
+						}
 						//var date = new Date().getTime();
 						sensordata.value= data.params.value;
 						sensordata.timeStamp= new Date().getTime();
@@ -59,24 +61,18 @@ exports.action = {
 									sensorType: 'generic',
 									objectID: data.params.thingName
 								});
-							} else {
-								var val = new api.sensorCache({sensorID: data.params.sensorName,
-									value: data.params.value,
-									timeStamp: new Date().getTime(),
-									quality: data.params.quality,
-									sensorQuality: sensor.quality,
-									sensorType: sensor.sensorType,
-									objectID: data.params.thingName
+								val.save(function (er) {
+									if (er) {
+										next(er);
+									} else {
+										data.response.payload = val;
+										next();
+									}
 								});
+								next();
+							} else {
+								next("Sensor not found");
 							}
-							val.save(function (er) {
-								if (er) {
-									next(er);
-								} else {
-									data.response.payload = val;
-									next();
-								}
-							})
 						}
 					});
 				}

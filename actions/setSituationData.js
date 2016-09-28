@@ -12,18 +12,24 @@ exports.action = {
     middleware:             [],
 
     inputs: {
-        objectName: {required: true},
+        thing: {required: true},
         situationtemplate: {required: true},
         occured: {required: true},
         timestamp: {required: false}
     },
 
     run: function(api, data, next){
-        var id = data.params.thing + "." + data.params.situationtemplate;
+        console.log(data.params);
         var quality = 100; //TODO: find real object structure
-        var timeStamp = new Date(data.params.timestamp) || new Date().toString();
+        if (!data.params.timestamp || isNaN(data.params.timestamp)) {
+            var timestamp = new Date().getTime();
+        } else {
+            timestamp = data.params.timestamp;
+        }
         var value = data.params.occured;
-        api.sensorCache.findOneAndUpdate({sensorID: id}, {objectID: data.params.objectName, value: value, timeStamp: timeStamp, quality: quality}, {upsert: true}, function (error, rows, raw) {
+        api.situation.findOneAndUpdate({thing: data.params.thing, template: data.params.situationtemplate},
+            {thing: data.params.thing, template: data.params.situationtemplate, value: value, timestamp: timestamp, quality: quality},
+            {upsert: true}, function (error, rows, raw) {
             if (error) {
                 next(error);
             } else {

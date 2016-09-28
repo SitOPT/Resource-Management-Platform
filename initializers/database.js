@@ -40,6 +40,16 @@ module.exports = {
             });
 
             api.sensor = mongoose.model('Sensor', sensorSchema);
+
+            var situationSchema = new mongoose.Schema({
+                thing: String,
+                template: String,
+                value: Boolean,
+                timestamp: Number,
+                quality: Number
+            });
+
+            api.situation = mongoose.model('Situation', situationSchema);
         });
         next();
     },

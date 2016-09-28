@@ -9,23 +9,18 @@ exports.action = {
     middleware:             [],
 
     inputs: {
-        objectName: {required: true},
-        situationName: {required: true}
+        thing: {required: true},
+        template: {required: true}
     },
 
     run: function(api, data, next) {
-        var http = require('http');
-        var sitdb = require('../config/sitdb.config.js');
-
-        http.get('http://' + sitdb.server + ':' + sitdb.port + '/situations/ByID?ID=' + data.params.situationID, function (result) {
-            //data.response.payload = result;
-            result.resume();
-            result.on('data', function (chunks) {
-                data.response.payload = JSON.stringify(JSON.parse(chunks).occured);
+        api.situation.findOne({thing: data.params.thing, template: data.params.template}, function (err, situation) {
+            if (err) {
+                next(err);
+            } else {
+                data.response.payload = situation;
                 next();
-            })
-        }).on('error', function (error) {
-            next(error);
+            }
         });
     }
 };

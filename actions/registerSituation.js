@@ -12,8 +12,8 @@ exports.action = {
     middleware:             [],
 
     inputs: {
-        sitTempID: {required: true},
-        thingID: {required: true}
+        template: {required: true},
+        thing: {required: true}
     },
 
     run: function(api, data, next){
@@ -23,50 +23,41 @@ exports.action = {
         var server = config.server;
         var port = config.port;
         var protocol = config.protocol;
-        var ssl = require("../config/servers/web.js").default.servers.web(api).sercure;
+        var ssl = require("../config/servers/web.js").default.servers.web(api).secure;
         var ownPort = require("../config/servers/web.js").default.servers.web(api).port;
         var callbackurl = (ssl == true ? "https" : "http") + "://" + api.utils.getExternalIPAddress() + ":" + ownPort +
-            "/setSituationData/" + data.params.sitTempID + "/" + data.params.thingID;
-        var postData = {
-            "SitTempID": data.params.sitTempID,
-            "ThingID": data.params.thingID,
-            "CallbackUrl": callbackurl,
+            "/situation";
+        var postData = JSON.stringify({
+            "SitTempName": data.params.template,
+            "ThingName": data.params.thing,
+            "CallbackURL": callbackurl,
             "once": false
-        };
-        var module = null;
+        });
+        var module = require(protocol);
         var options = {
             "host": server,
             "port": port,
             "path": "/situations/changes",
             "method": "POST",
             "headers": {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Content-Length': postData.length
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(postData)
             }
         };
 
-        if (protocol.toLowerCase() === "http") {
-            module = require("http");
-        } else {
-            module = require("https");
-        }
-
         var request = module.request(options, function (res) {
-            if (res.statusCode == 400 || res.statusCode == 404) {
-                next("Error while registering the sensor.");
-            } else {
-                postData.params.sensorID = postData.params.sitTempID;
-                postData.params.objectID = postData.params.thingID;
-                postData.params.sensorUrl = protocol + "://" + server + ":" + port + "/situation/changes";
-                postData.params.sensorType = "situation";
-                postData.params.quality = "100";
-                require("./addSensor").action(api, postData, next);
-            }
+            res.on('data', function (chunk) {});
+            res.on('end', function () {
+            console.log("end");
+                next();
+            });
         });
 
         request.on('error', function (error) {
+        console.log("error");
             next(error)
         });
+        console.log(postData)
 
         request.write(postData);
         request.end();

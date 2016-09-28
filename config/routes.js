@@ -31,13 +31,15 @@ exports.default = {
                 { path: '/rmp/sensordata/:thingName/:sensorName', action: 'getSensordata' },
                 { path: '/sensor/:objectName/:sensorName', action: 'getSensor' },
                 { path: '/sensor', action: 'getAllSensors' },
-                { path: '/rmp/objectdata/:objectName', action: 'getObjectdata' }
+                { path: '/rmp/objectdata/:objectName', action: 'getObjectdata' },
+                { path: '/rmp/situationdata/:thing/:template', action: 'getSituationdata' }
             ],
 
             post : [
                 { path: '/value', action: 'setSensordata'},
                 { path: '/sensor', action: 'addSensor' },
-                { path: '/situation', action: 'setSituationData' }
+                { path: '/situation', action: 'setSituationData' },
+                { path: '/situation/:thing/:template', action: 'registerSituation' }
             ],
 
             put: [
